@@ -1,4 +1,4 @@
-// Globalne varijable - proba za git push
+// Globalne varijable
 const players = []; // Igraci i njihovi rezultati
 let numberPlayers = 0;
 const rounds = {
@@ -31,7 +31,7 @@ function settingGame() {
     numRounds > 0
   ) {
     numberPlayers = numPlayers; // podesavanje broja igraca
-    rounds.current = 1; // podesavanje za prvo bacanje
+    rounds.current = 0; // podesavanje za prvo bacanje
     rounds.total = numRounds; // podesavanje ukupnog broja bacanja
     inputPlayers();
   } else {
@@ -75,10 +75,12 @@ function inputPlayer() {
 // Realizacija bacanja
 function playGame() {
   for (let countRounds = 0; countRounds < rounds.total; countRounds++) {
+    rounds.current = countRounds;
     playRound();
     displayRound();
     displayStanding();
   }
+  
 }
 
 function playRound() {
@@ -87,28 +89,29 @@ function playRound() {
     k[countPlayers] = Math.ceil(Math.random() * 6);
     players[countPlayers].throws[rounds.current] = k[countPlayers];
     players[countPlayers].score += k[countPlayers];
-    rounds.current++
   }
 }
 
-function displayRound() {}
-
-function displayStanding() {}
-
-function input() {
-  for (let j = 0; j < players.length; j++) {
-    k[j] = Math.ceil(Math.random() * 6);
-    players[j].score += k[j];
+function displayRound() {
+  console.log(
+    `%c**** ROUND ${rounds.current + 1} ****`,
+    "color: blue; font-size: 20px; font-weight: bold;"
+  );
+  for (let countPlayers = 0; countPlayers < players.length; countPlayers++) {
+    const player = players[countPlayers];
     console.log(
-      players[j].name + " ---> " + k[j] + "  =>  " + players[j].score + "  <=="
+      `${player.name} ==> ${player.throws[rounds.current]} ==> ( %c${
+        player.score
+      } )`,
+      "color: red; font-weight: bold;"
     );
   }
 }
 
+function displayStanding() {
+  const standing = players.map((player) => player);
+  console.log(standing);
+}
+
 startGame();
 
-// inputPlayers();
-
-// playRound();
-
-console.log(players);

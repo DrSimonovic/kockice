@@ -1,4 +1,4 @@
-// Globalne varijable - radi
+// Globalne varijable - proba za git pull
 const players = []; // Igraci i njihovi rezultati
 let numberPlayers = 0;
 const rounds = {

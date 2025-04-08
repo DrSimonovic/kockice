@@ -1,4 +1,4 @@
-// Globalne varijable
+// Globalne varijable - radi
 const players = []; // Igraci i njihovi rezultati
 let numberPlayers = 0;
 const rounds = {

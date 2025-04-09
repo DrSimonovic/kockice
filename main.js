@@ -15,8 +15,7 @@ function startGame() {
   if (confirmationQuestion) {
     settingGame();
   } else {
-    alert("Igra je otkazana. Mogućnost nove igre imate za 5 sekundi.");
-    setTimeout(input, 5000);
+    alert("Igra je otkazana.");
   }
 }
 
@@ -24,6 +23,7 @@ function startGame() {
 function settingGame() {
   let numPlayers = prompt("Unesite broj igraca: ");
   let numRounds = prompt("Unesite broj bacanja: ");
+
   if (
     !isNaN(numPlayers) &&
     !isNaN(numRounds) &&
@@ -38,7 +38,7 @@ function settingGame() {
     alert(
       "Nijeste ispravno unijeli broj igraca ili broj bacanja!!! Pokusajte ponovo!"
     );
-    setTimeout(settingGame, 0);
+    settingGame();
   }
 }
 
@@ -58,7 +58,6 @@ function inputPlayer() {
     let playerName = prompt(
       `Unesite ime ${position + 1}. igrača od ukupno ${numberPlayers}!`
     );
-
     if (playerName && /^[A-Za-z\s]+$/.test(playerName)) {
       players[position] = {
         name: playerName,
@@ -72,19 +71,20 @@ function inputPlayer() {
   }
 }
 
-// Realizacija bacanja
+// Realizacija igre
 function playGame() {
   for (let countRounds = 0; countRounds < rounds.total; countRounds++) {
     rounds.current = countRounds;
     playRound();
     displayRound();
-    displayStanding();
   }
-  
+  displayStanding();
 }
 
+// Realizacija jednog bacanja
 function playRound() {
   const k = [];
+
   for (let countPlayers = 0; countPlayers < players.length; countPlayers++) {
     k[countPlayers] = Math.ceil(Math.random() * 6);
     players[countPlayers].throws[rounds.current] = k[countPlayers];
@@ -92,6 +92,7 @@ function playRound() {
   }
 }
 
+// Prikaz poslije jednog bacanja
 function displayRound() {
   console.log(
     `%c**** ROUND ${rounds.current + 1} ****`,
@@ -108,10 +109,48 @@ function displayRound() {
   }
 }
 
+// Prikazivanje tabele i isticanje pobjednika (jednog ili vise njih)
 function displayStanding() {
-  const standing = players.map((player) => player);
-  console.log(standing);
+  const standing = players.map((player) => player); // kopiranje niza players radi sortiranja
+
+  standing.sort((a, b) => b.score - a.score);
+  let max = standing[0].score; // najbolji rezultat
+
+  console.log(max);
+  console.log(
+    `%c******************`,
+    "color: green; font-size: 20px; font-weight: bold;"
+  );
+  console.log(
+    `%c**** STANDING ****`,
+    "color: green; font-size: 20px; font-weight: bold;"
+  );
+  console.log(
+    `%c******************`,
+    "color: green; font-size: 20px; font-weight: bold;"
+  );
+
+  // Pobjednik
+  console.log(
+    ` %c 1.  ${standing[0].name} ===> ${standing[0].score} <=== W I N N E R `,
+    `color: green;
+       font-size: 16px; font-weight: bold;
+       background-color: gold`
+  );
+
+  //Ostali, moguce da ima vise pobjednika
+  for (let countPlayers = 1; countPlayers < standing.length; countPlayers++) {
+    console.log(
+      ` %c ${
+        standing[countPlayers].score === standing[countPlayers - 1].score
+          ? " "
+          : countPlayers + 1
+      }.  ${standing[countPlayers].name} ===> ${standing[countPlayers].score} ${standing[countPlayers].score === max ? "<=== W I N N E R " : ""}`,
+      `color: green;
+       font-size: 16px; font-weight: bold;
+       background-color: ${standing[countPlayers].score === max ? "gold" : ""};`
+    );
+  }
 }
 
 startGame();
-
